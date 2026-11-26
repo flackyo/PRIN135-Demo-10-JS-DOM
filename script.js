@@ -48,3 +48,14 @@ function render() {
 }
 
 render();
+
+function addTodo(text, hours) {
+	  todos.push({
+		id: Date.now().toString(36) + Math.random().toString(36).slice(2, 6),
+		text,
+		hours,
+		completed: false,
+	  });
+	  
+	  render();
+	}
