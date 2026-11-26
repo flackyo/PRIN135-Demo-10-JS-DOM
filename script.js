@@ -1,27 +1,50 @@
-// 1. Get element by ID
-{
-  const element = document.getElementById("todo-list");
-  console.log(element);
+let todos = [
+    {"id":"1", "text":"Task X", "hours":1, "completed":false},
+    {"id":"2", "text":"Task Y", "hours":2.5, "completed":true},
+    {"id":"3", "text":"Task Z", "hours":6, "completed":false}
+];
+
+const list = document.getElementById("todo-list");
+
+function getDifficulty(hours) {
+    if (hours > 5) return "Hard";
+    if (hours > 2) return "Medium";
+    return "Easy";
 }
 
-// 2. Get elements by tag name
-{
-  const element = document.getElementsByTagName("h1");
-  console.log(element);
+function createTodoElement(todo) {
+    const li = document.createElement("li");
+    li.className = "todo-item" + (todo.completed ? " completed" : "");
+    li.dataset.id = todo.id;
+
+    const checkbox = document.createElement("input");
+    checkbox.type = "checkbox";
+    checkbox.checked = todo.completed;
+
+    const text = document.createElement("span");
+    text.className = "todo-text";
+    text.textContent = todo.text;
+
+    const hours = typeof todo.hours === "number" ? todo.hours : 0;
+    const difficulty = getDifficulty(hours);
+    
+    const label = document.createElement("span");
+    label.classList.add("difficulty");
+    label.classList.add(`difficulty-${difficulty.toLocaleLowerCase()}`);
+    label.textContent = `${difficulty} · ${hours}h`;
+
+    const del = document.createElement("button");
+    del.type = "button";
+    del.className = "delete-btn";
+    del.textContent = "x";
+
+    li.append(checkbox, text, label, del);
+    return li;
 }
 
-// 3. Get elements by class name
-{
-  const element = document.getElementsByClassName("todo-item");
-  console.log(element);
+function render() {
+    const items = todos;
+    list.replaceChildren(...items.map(createTodoElement));
 }
 
-// 4. Query selector
-{
-  const element = document.querySelector(".filter");
-  console.log(element);
-}
-
-// 5. Update text content
-const countEl = document.getElementById("todo-count");
-countEl.textContent = "x items left | x hours remaining";
+render();
